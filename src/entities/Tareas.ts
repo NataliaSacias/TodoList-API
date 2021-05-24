@@ -19,10 +19,10 @@ export class Tareas extends BaseEntity{
 //   @Column()
 //   descripcion: string;
 
-  @Column({unique: true})
+  @Column()
   estado: boolean;
 
 
-@ManyToOne(() => Users, user => user.tareas)
-user: Users;
+@ManyToOne(() => Users, users => users.tareas)
+users: Users;
 }

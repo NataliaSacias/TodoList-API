@@ -54,17 +54,26 @@ export const createTarea = async (req: Request, res:Response): Promise<Response>
 	const userRepo = getRepository(Users)
 	// fetch for any user with this email
 	const user = await userRepo.findOne({ where: {id: req.params.id }})
-	if(user) throw new Exception("El usuario no existe")
+	if(!user) throw new Exception("El usuario no existe")
+    const newTarea = getRepository(Tareas).create();  //Creo un tarea
+    
 
-    const newTask = new Tareas();
-    newTask.tarea = req.body.tarea;
+    newTarea.tarea = req.body.tarea;
+    newTarea.estado = req.body.estado;
+    newTarea.users = user
 
-    const newTarea = getRepository(Tareas).create(req.body);  //Creo un tarea
+
+  
 	const results = await getRepository(Tareas).save(newTarea); //Grabo el nuevo usuario 
 	return res.json(results);
 }
 
 export const getTareas = async (req: Request, res: Response): Promise<Response> =>{
 		const tareas = await getRepository(Tareas).find();
+		return res.json(tareas);
+}
+
+export const getTareasPorUsuario = async (req: Request, res: Response): Promise<Response> =>{
+		const tareas = await getRepository(Tareas).find(({ where: {users: req.params.id }}));
 		return res.json(tareas);
 }

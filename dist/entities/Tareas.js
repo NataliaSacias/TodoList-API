@@ -41,13 +41,13 @@ var Tareas = /** @class */ (function (_super) {
         __metadata("design:type", String)
     ], Tareas.prototype, "tarea");
     __decorate([
-        typeorm_1.Column({ unique: true }),
+        typeorm_1.Column(),
         __metadata("design:type", Boolean)
     ], Tareas.prototype, "estado");
     __decorate([
-        typeorm_1.ManyToOne(function () { return Users_1.Users; }, function (user) { return user.tareas; }),
+        typeorm_1.ManyToOne(function () { return Users_1.Users; }, function (users) { return users.tareas; }),
         __metadata("design:type", Users_1.Users)
-    ], Tareas.prototype, "user");
+    ], Tareas.prototype, "users");
     Tareas = __decorate([
         typeorm_1.Entity()
     ], Tareas);

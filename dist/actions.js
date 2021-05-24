@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getTareas = exports.createTarea = exports.borrarTarea = exports.deleteUsers = exports.getUsers = exports.createUser = void 0;
+exports.getTareasPorUsuario = exports.getTareas = exports.createTarea = exports.borrarTarea = exports.deleteUsers = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var Tareas_1 = require("./entities/Tareas");
@@ -107,7 +107,7 @@ var borrarTarea = function (req, res) { return __awaiter(void 0, void 0, void 0,
 }); };
 exports.borrarTarea = borrarTarea;
 var createTarea = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userRepo, user, newTask, newTarea, results;
+    var userRepo, user, newTarea, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -121,11 +121,12 @@ var createTarea = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, userRepo.findOne({ where: { id: req.params.id } })];
             case 1:
                 user = _a.sent();
-                if (user)
+                if (!user)
                     throw new utils_1.Exception("El usuario no existe");
-                newTask = new Tareas_1.Tareas();
-                newTask.tarea = req.body.tarea;
-                newTarea = typeorm_1.getRepository(Tareas_1.Tareas).create(req.body);
+                newTarea = typeorm_1.getRepository(Tareas_1.Tareas).create();
+                newTarea.tarea = req.body.tarea;
+                newTarea.estado = req.body.estado;
+                newTarea.users = user;
                 return [4 /*yield*/, typeorm_1.getRepository(Tareas_1.Tareas).save(newTarea)];
             case 2:
                 results = _a.sent();
@@ -146,3 +147,15 @@ var getTareas = function (req, res) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 exports.getTareas = getTareas;
+var getTareasPorUsuario = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var tareas;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(Tareas_1.Tareas).find(({ where: { users: req.params.id } }))];
+            case 1:
+                tareas = _a.sent();
+                return [2 /*return*/, res.json(tareas)];
+        }
+    });
+}); };
+exports.getTareasPorUsuario = getTareasPorUsuario;
