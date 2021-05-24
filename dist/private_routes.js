@@ -37,4 +37,8 @@ var actions = __importStar(require("./actions"));
 // declare a new router to include all the endpoints
 var router = express_1.Router();
 router.get('/user', utils_1.safe(actions.getUsers));
+router["delete"]('/user/:id', utils_1.safe(actions.deleteUsers));
+router.get('/tarea/:id', utils_1.safe(actions.getTareas));
+router.post('/tarea/:id', utils_1.safe(actions.createTarea));
+router["delete"]('/tarea/:id', utils_1.safe(actions.borrarTarea));
 exports["default"] = router;

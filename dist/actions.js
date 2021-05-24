@@ -36,9 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getUsers = exports.createUser = void 0;
+exports.getTareas = exports.createTarea = exports.borrarTarea = exports.deleteUsers = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
+var Tareas_1 = require("./entities/Tareas");
 var utils_1 = require("./utils");
 var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userRepo, user, newUser, results;
@@ -81,3 +82,67 @@ var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
     });
 }); };
 exports.getUsers = getUsers;
+var deleteUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var users;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(Users_1.Users)["delete"](req.params.id)];
+            case 1:
+                users = _a.sent();
+                return [2 /*return*/, res.json(users)];
+        }
+    });
+}); };
+exports.deleteUsers = deleteUsers;
+var borrarTarea = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var tarea;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(Tareas_1.Tareas)["delete"](req.params.id)];
+            case 1:
+                tarea = _a.sent();
+                return [2 /*return*/, res.json(tarea)];
+        }
+    });
+}); };
+exports.borrarTarea = borrarTarea;
+var createTarea = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userRepo, user, newTask, newTarea, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                // important validations to avoid ambiguos errors, the client needs to understand what went wrong
+                if (!req.body.tarea)
+                    throw new utils_1.Exception("Please provide a tarea");
+                // if(!req.body.descripcion) throw new Exception("Please provide a descripcion")
+                if (!req.body.estado)
+                    throw new utils_1.Exception("Please provide a estado");
+                userRepo = typeorm_1.getRepository(Users_1.Users);
+                return [4 /*yield*/, userRepo.findOne({ where: { id: req.params.id } })];
+            case 1:
+                user = _a.sent();
+                if (user)
+                    throw new utils_1.Exception("El usuario no existe");
+                newTask = new Tareas_1.Tareas();
+                newTask.tarea = req.body.tarea;
+                newTarea = typeorm_1.getRepository(Tareas_1.Tareas).create(req.body);
+                return [4 /*yield*/, typeorm_1.getRepository(Tareas_1.Tareas).save(newTarea)];
+            case 2:
+                results = _a.sent();
+                return [2 /*return*/, res.json(results)];
+        }
+    });
+}); };
+exports.createTarea = createTarea;
+var getTareas = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var tareas;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(Tareas_1.Tareas).find()];
+            case 1:
+                tareas = _a.sent();
+                return [2 /*return*/, res.json(tareas)];
+        }
+    });
+}); };
+exports.getTareas = getTareas;

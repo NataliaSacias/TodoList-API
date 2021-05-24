@@ -19,5 +19,9 @@ import * as actions from './actions';
 const router = Router();
 
 router.get('/user', safe(actions.getUsers));
+router.delete('/user/:id', safe(actions.deleteUsers));
+router.get('/tarea/:id', safe(actions.getTareas));
+router.post('/tarea/:id', safe(actions.createTarea));
+router.delete('/tarea/:id', safe(actions.borrarTarea));
 
 export default router;
